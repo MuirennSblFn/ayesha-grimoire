@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grimoire de la Brume</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+Sans+SC:wght@500;700&family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&display=swap">
+<style id="css">
+:root{
+  --bg:#e4e2ea; --page:#f2f0f4; --page-2:#e9e6ee; --ink:#1f1b2a; --ink-soft:#5b5569; --ink-faint:#8a8497;
+  --rule:#cbc5d4; --gilt:#83641b; --gilt-soft:rgba(131,100,27,.12); --sang:#8a2d39; --sang-soft:rgba(138,45,57,.08);
+  --fog-a:rgba(120,108,160,.22); --fog-b:rgba(150,140,120,.16); --shadow:0 1px 0 rgba(31,27,42,.06),0 12px 40px -18px rgba(31,27,42,.35);
+  --f-display:"IM Fell English SC","IM Fell English",Georgia,"Times New Roman",serif;
+  --f-fell:"IM Fell English",Georgia,serif;
+  --f-body:"Alegreya",Georgia,"Times New Roman",serif;
+  --f-label:"Alegreya Sans SC","Gill Sans","Trebuchet MS",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#111018; --page:#1a1823; --page-2:#211e2c; --ink:#e5e1ec; --ink-soft:#a39cb3; --ink-faint:#746d84;
+    --rule:#353045; --gilt:#d3b26a; --gilt-soft:rgba(211,178,106,.12); --sang:#d9727c; --sang-soft:rgba(217,114,124,.07);
+    --fog-a:rgba(150,135,210,.13); --fog-b:rgba(200,180,130,.06); --shadow:0 1px 0 rgba(0,0,0,.4),0 18px 50px -20px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#111018; --page:#1a1823; --page-2:#211e2c; --ink:#e5e1ec; --ink-soft:#a39cb3; --ink-faint:#746d84;
+  --rule:#353045; --gilt:#d3b26a; --gilt-soft:rgba(211,178,106,.12); --sang:#d9727c; --sang-soft:rgba(217,114,124,.07);
+  --fog-a:rgba(150,135,210,.13); --fog-b:rgba(200,180,130,.06); --shadow:0 1px 0 rgba(0,0,0,.4),0 18px 50px -20px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before,body::after{content:"";position:fixed;inset:-20%;pointer-events:none;z-index:0}
+body::before{background:radial-gradient(40% 30% at 20% 30%,var(--fog-a),transparent 70%),radial-gradient(35% 28% at 80% 70%,var(--fog-a),transparent 70%);animation:drift 70s ease-in-out infinite alternate}
+body::after{background:radial-gradient(45% 25% at 70% 20%,var(--fog-b),transparent 70%),radial-gradient(30% 30% at 30% 85%,var(--fog-b),transparent 70%);animation:drift 95s ease-in-out infinite alternate-reverse}
+@keyframes drift{from{transform:translate3d(-4%,-2%,0)}to{transform:translate3d(4%,3%,0)}}
+@media (prefers-reduced-motion:reduce){body::before,body::after{animation:none}}
+
+.app{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100%}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:12px 20px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+.brand{display:flex;align-items:center;gap:12px;margin-right:auto;min-width:0}
+.brand svg{width:34px;height:34px;color:var(--gilt);flex:none}
+.brand h1{font-family:var(--f-display);font-weight:400;font-size:1.45rem;letter-spacing:.02em;margin:0;line-height:1.1}
+.brand small{display:block;font-family:var(--f-label);font-size:.72rem;letter-spacing:.14em;color:var(--ink-soft)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+
+button{font:inherit;color:inherit;cursor:pointer}
+.btn{font-family:var(--f-label);font-weight:700;font-size:.82rem;letter-spacing:.1em;border:1px solid var(--rule);background:var(--page);padding:8px 14px;border-radius:3px;display:inline-flex;align-items:center;gap:8px;transition:border-color .15s,background .15s}
+.btn:hover{border-color:var(--gilt)}
+.btn.primary{background:var(--gilt);border-color:var(--gilt);color:var(--page)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.danger{color:var(--sang);border-color:color-mix(in srgb,var(--sang) 40%,var(--rule))}
+.btn.ghost{background:transparent}
+.btn[aria-pressed="false"] .dot{opacity:.25}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--sang);display:inline-block}
+:focus-visible{outline:2px solid var(--gilt);outline-offset:2px}
+
+.banner{position:relative;z-index:1;margin:12px 20px 0;padding:10px 14px;border:1px dashed var(--sang);color:var(--sang);font-size:.9rem;border-radius:3px;background:var(--sang-soft)}
+
+.layout{flex:1;display:grid;grid-template-columns:300px minmax(0,1fr);gap:0;min-height:0}
+aside.index{border-right:1px solid var(--rule);padding:18px 16px 40px;display:flex;flex-direction:column;gap:14px;position:sticky;top:64px;align-self:start;max-height:calc(100vh - 64px);overflow:auto}
+.index h2{font-family:var(--f-label);font-size:.78rem;letter-spacing:.16em;color:var(--ink-soft);margin:0;display:flex;justify-content:space-between;font-weight:700}
+.index h2 span{font-variant-numeric:tabular-nums}
+.search{width:100%;font:inherit;font-size:.95rem;padding:8px 10px;border:1px solid var(--rule);border-radius:3px;background:var(--page);color:var(--ink)}
+.famfilter{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--f-label);font-size:.72rem;letter-spacing:.06em;padding:3px 9px;border:1px solid var(--rule);border-radius:20px;background:transparent;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--gilt-soft);border-color:var(--gilt);color:var(--ink)}
+.toc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.toc button{width:100%;text-align:left;background:none;border:0;border-bottom:1px dotted var(--rule);padding:10px 6px;display:grid;grid-template-columns:3.2em 1fr auto;gap:8px;align-items:baseline}
+.toc button:hover{background:var(--gilt-soft)}
+.toc button[aria-current="true"]{background:var(--gilt-soft)}
+.toc .num{font-family:var(--f-fell);color:var(--gilt);font-size:.9rem;font-variant-numeric:tabular-nums}
+.toc .nm{font-family:var(--f-fell);font-size:1.05rem;line-height:1.25}
+.toc .fm{display:block;font-family:var(--f-label);font-size:.68rem;letter-spacing:.08em;color:var(--ink-soft);margin-top:2px}
+.toc .empty{font-style:italic;color:var(--ink-faint);font-size:.92rem;padding:8px 2px}
+
+.pips{display:inline-flex;gap:3px;vertical-align:middle}
+.pips i{width:7px;height:7px;border-radius:50%;border:1px solid var(--gilt);display:block}
+.pips i.on{background:var(--gilt)}
+
+main{padding:28px 24px 120px;min-width:0}
+.sheet{max-width:780px;margin:0 auto;background:var(--page);border:1px solid var(--rule);box-shadow:var(--shadow);padding:44px 52px 56px;position:relative}
+.sheet::before{content:"";position:absolute;inset:8px;border:1px solid var(--rule);pointer-events:none;opacity:.7}
+.back{display:none;margin:0 auto 14px;max-width:780px}
+
+.eyebrow{font-family:var(--f-label);font-size:.78rem;letter-spacing:.2em;color:var(--gilt);text-align:center;font-weight:700}
+.entry-name{font-family:var(--f-display);font-weight:400;font-size:clamp(2rem,5vw,3rem);line-height:1.05;text-align:center;margin:10px 0 6px;text-wrap:balance}
+.aka{font-family:var(--f-fell);font-style:italic;text-align:center;color:var(--ink-soft);margin:0 0 18px;text-wrap:balance}
+.meta{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;font-family:var(--f-label);font-size:.78rem;letter-spacing:.08em;color:var(--ink-soft);padding:12px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.meta b{color:var(--ink);font-weight:700}
+.tools{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:18px 0 6px}
+
+.part-title{font-family:var(--f-display);font-size:1.25rem;font-weight:400;text-align:center;margin:40px 0 4px;letter-spacing:.04em}
+.part-sub{text-align:center;font-family:var(--f-label);font-size:.72rem;letter-spacing:.16em;color:var(--ink-soft);margin:0 0 10px}
+.orn{display:flex;align-items:center;gap:12px;color:var(--gilt);margin:0 auto 8px;max-width:240px}
+.orn::before,.orn::after{content:"";flex:1;height:1px;background:currentColor;opacity:.5}
+.orn svg{width:14px;height:14px}
+
+section.sec{padding:18px 0 4px;border-bottom:1px dotted var(--rule)}
+section.sec:last-child{border-bottom:0}
+.sec h3{font-family:var(--f-fell);font-weight:400;font-size:1.3rem;margin:0 0 8px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sec h3 .rn{font-family:var(--f-label);font-size:.72rem;letter-spacing:.14em;color:var(--gilt);min-width:2.4em;font-weight:700}
+.sec h3 .sub{font-family:var(--f-body);font-style:italic;font-size:.9rem;color:var(--ink-soft)}
+.field{margin:0 0 12px}
+.flabel{font-family:var(--f-label);font-size:.74rem;letter-spacing:.1em;color:var(--ink-soft);font-weight:700;margin-bottom:2px}
+.fval p{margin:0 0 .6em;max-width:65ch}
+.blank{font-style:italic;color:var(--ink-faint);margin:0 0 12px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-family:var(--f-label);font-size:.76rem;letter-spacing:.06em;border:1px solid var(--gilt);color:var(--ink);padding:1px 9px;border-radius:2px;background:var(--gilt-soft)}
+ul.signs{margin:0;padding:0;list-style:none}
+ul.signs li{padding-left:1.4em;position:relative;margin:0 0 4px}
+ul.signs li::before{content:"✦";position:absolute;left:0;color:var(--gilt);font-size:.8em;top:.2em}
+.notes{display:flex;flex-direction:column;gap:10px}
+.note{border-left:2px solid var(--gilt);padding:2px 0 2px 12px}
+.note .who{font-family:var(--f-label);font-size:.74rem;letter-spacing:.08em;color:var(--ink-soft)}
+.note .who b{color:var(--ink)}
+.note p{margin:2px 0 0}
+
+.mj{margin-top:44px;border:1px solid color-mix(in srgb,var(--sang) 55%,var(--rule));background:var(--sang-soft);padding:6px 24px 16px;position:relative}
+.mj .part-title{color:var(--sang);margin-top:18px}
+.mj .orn{color:var(--sang)}
+.mj .sec h3 .rn{color:var(--sang)}
+.mj-hidden{margin-top:40px;text-align:center;font-style:italic;color:var(--ink-faint);font-size:.95rem}
+.statgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--rule);background:var(--page)}
+.statgrid>div{text-align:center;padding:8px 4px;border-right:1px solid var(--rule)}
+.statgrid>div:last-child{border-right:0}
+.statgrid .k{font-family:var(--f-label);font-size:.72rem;letter-spacing:.14em;color:var(--ink-soft);font-weight:700}
+.statgrid .v{font-family:var(--f-fell);font-size:1.5rem;font-variant-numeric:tabular-nums;line-height:1.2}
+.statgrid .v small{font-size:.7rem;color:var(--ink-faint);font-family:var(--f-label)}
+.statline{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:10px;font-family:var(--f-label);font-size:.8rem;letter-spacing:.06em;color:var(--ink-soft)}
+.statline b{font-family:var(--f-fell);font-size:1.1rem;color:var(--ink);letter-spacing:0;font-weight:400;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+table.atk{border-collapse:collapse;width:100%;font-size:.95rem}
+table.atk th{font-family:var(--f-label);font-size:.72rem;letter-spacing:.1em;color:var(--ink-soft);text-align:left;border-bottom:1px solid var(--rule);padding:4px 8px 4px 0;font-weight:700}
+table.atk td{padding:6px 8px 6px 0;border-bottom:1px dotted var(--rule);vertical-align:top}
+
+/* Frontispice */
+.front{text-align:center;padding:30px 0 10px}
+.front svg.big{width:120px;height:120px;color:var(--gilt);opacity:.9}
+.front h2{font-family:var(--f-display);font-weight:400;font-size:2rem;margin:14px 0 6px;text-wrap:balance}
+.front p{color:var(--ink-soft);max-width:46ch;margin:0 auto 18px}
+.front .count{font-family:var(--f-label);letter-spacing:.14em;font-size:.8rem;color:var(--gilt);font-weight:700}
+
+/* Edition */
+form.edit .sec{border-bottom:1px dotted var(--rule)}
+.in, .ta{width:100%;font:inherit;font-size:1rem;color:var(--ink);background:var(--page-2);border:1px solid var(--rule);border-radius:2px;padding:7px 9px}
+.ta{resize:vertical;min-height:4.2em;line-height:1.5}
+.in:focus,.ta:focus{border-color:var(--gilt);outline:none;box-shadow:0 0 0 3px var(--gilt-soft)}
+.in.big{font-family:var(--f-display);font-size:1.6rem;text-align:center;padding:8px}
+.in.num{width:5.5em;text-align:center;font-variant-numeric:tabular-nums}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choices{display:flex;flex-wrap:wrap;gap:6px}
+.choice{position:relative}
+.choice input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.choice span{display:inline-block;font-family:var(--f-label);font-size:.8rem;letter-spacing:.05em;padding:4px 11px;border:1px solid var(--rule);border-radius:2px;background:var(--page-2)}
+.choice input:checked+span{border-color:var(--gilt);background:var(--gilt-soft);color:var(--ink);box-shadow:inset 0 0 0 1px var(--gilt)}
+.choice input:focus-visible+span{outline:2px solid var(--gilt);outline-offset:2px}
+.lrow,.rrow{display:flex;gap:6px;align-items:flex-start;margin-bottom:6px}
+.rrow{display:grid;gap:6px;align-items:start}
+.x{border:1px solid var(--rule);background:transparent;width:34px;height:34px;flex:none;border-radius:2px;color:var(--ink-soft);font-size:1.1rem;line-height:1}
+.x:hover{color:var(--sang);border-color:var(--sang)}
+.add{font-family:var(--f-label);font-size:.78rem;letter-spacing:.08em;background:none;border:1px dashed var(--rule);padding:5px 12px;border-radius:2px;color:var(--ink-soft);font-weight:700}
+.add:hover{border-color:var(--gilt);color:var(--ink)}
+.colhead{font-family:var(--f-label);font-size:.68rem;letter-spacing:.1em;color:var(--ink-faint);font-weight:700}
+.statedit{display:flex;flex-wrap:wrap;gap:12px}
+.statedit label{display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--f-label);font-size:.72rem;letter-spacing:.12em;color:var(--ink-soft);font-weight:700}
+.err{color:var(--sang);font-size:.88rem;margin-top:4px}
+.savebar{position:sticky;bottom:0;z-index:4;max-width:780px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border:1px solid var(--rule);border-bottom:0}
+.savebar .spacer{flex:1}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:var(--sang);font-size:.92rem}
+
+.addnote{margin-top:12px;display:grid;grid-template-columns:9.5em 1fr;gap:6px}
+.addnote .ta{grid-column:1/-1;min-height:3em}
+.addnote .btn{justify-self:start}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--page);font-family:var(--f-label);letter-spacing:.08em;font-size:.82rem;padding:9px 16px;border-radius:3px;z-index:20;box-shadow:var(--shadow)}
+.modal{position:fixed;inset:0;z-index:30;background:rgba(10,8,16,.55);display:flex;align-items:center;justify-content:center;padding:16px}
+.modal .box{background:var(--page);border:1px solid var(--rule);padding:20px;max-width:620px;width:100%;box-shadow:var(--shadow)}
+.modal textarea{height:50vh}
+.loading{text-align:center;color:var(--ink-soft);font-style:italic;padding:60px 0}
+
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr}
+  aside.index{position:static;max-height:none;border-right:0;padding:16px}
+  .app.reading aside.index{display:none}
+  .app:not(.reading) main{display:none}
+  .back{display:flex}
+  main{padding:14px 16px 110px}
+  .sheet{padding:28px 20px 36px}
+  .sheet::before{inset:5px}
+  .mj{padding:4px 14px 12px}
+  .grid2{grid-template-columns:1fr}
+  .statgrid{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .statgrid .v{font-size:1.2rem}
+  header.top{padding:10px 16px}
+  .rrow{grid-template-columns:1fr!important;padding-bottom:8px;border-bottom:1px dotted var(--rule)}
+  .rrow.colhead{display:none}
+  .rrow .x{justify-self:end}
+  .brand h1{font-size:1.2rem}
+}
+/* Reset minimal (repris lorsque la page se republie elle-même) */
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+
+/* Visibilité côté joueurs */
+.vis-t{margin-left:auto;font-family:var(--f-label);font-size:.66rem;letter-spacing:.1em;font-weight:700;border:1px solid var(--rule);background:transparent;padding:2px 9px;border-radius:20px;color:var(--ink-faint);align-self:center}
+.vis-t[aria-pressed="true"]{color:var(--gilt);border-color:var(--gilt);background:var(--gilt-soft)}
+.vis-t:hover{border-color:var(--gilt)}
+.sec.veiled>*:not(h3){opacity:.5}
+.vis{margin-left:auto;align-self:center}
+.vis span{font-size:.68rem!important;padding:2px 9px!important;border-radius:20px!important}
+.pub{display:inline-flex;align-items:center;gap:6px}
+.pub[aria-pressed="true"]{border-color:var(--gilt);color:var(--ink);background:var(--gilt-soft)}
+.pub[aria-pressed="false"]{color:var(--ink-soft)}
+.toc .pubmark{color:var(--gilt)}
+.foot{max-width:780px;margin:22px auto 0;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;font-family:var(--f-label);font-size:.74rem;letter-spacing:.08em;color:var(--ink-faint)}
+.foot button{background:none;border:0;border-bottom:1px dotted var(--ink-faint);color:var(--ink-soft);font-family:var(--f-label);font-size:.74rem;letter-spacing:.08em;padding:0}
+.steps{margin:8px 0 14px;padding-left:1.3em}
+.steps li{margin-bottom:4px}
+.box h3{font-family:var(--f-fell);font-weight:400;font-size:1.3rem;margin:0 0 6px}
+.box p{margin:0 0 10px}
+.box .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.box a{color:var(--gilt)}
+.obs{margin-top:28px;border:1px dashed var(--gilt);padding:16px 18px;background:var(--gilt-soft)}
+.obs h3{font-family:var(--f-fell);font-weight:400;font-size:1.2rem;margin:0 0 4px}
+.obs p{margin:0 0 10px;color:var(--ink-soft);font-size:.95rem}
+.obs .grid{display:grid;grid-template-columns:12em 1fr;gap:6px}
+.obs .grid .ta{grid-column:1/-1}
+@media (max-width:860px){.obs .grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script id="app">(()=>{
+const GRIMOIRE_STANDALONE=true;
+const FAMILLES = ['Fée / petit peuple','Mort-vivant','Métamorphe','Démon','Esprit / fantôme','Bête mythique','Autre'];
+const CONNAISSANCE = ['Rumeur','Partiel','Documenté','Complet'];
+const STATS = ['INT','DEX','FOR','PER','CHA'];
+const EXTRA = [{k:'pv',l:'PV'},{k:'armure',l:'Armure',hint:'réduction / coup'},{k:'pm',l:'PM'},{k:'volonte',l:'Volonté',hint:'/20'}];
+
+const SECTIONS_J = [
+  {id:'desc', t:'Description', f:[{k:'apparence',l:'Apparence réelle',t:'area'},{k:'taille',l:'Taille / carrure',t:'text'}]},
+  {id:'brume', t:'Sous la Brume', f:[{k:'percu',l:'Ce que perçoivent les humains',t:'area'},{k:'explication',l:'Explication rationnelle habituelle',t:'area',ph:'fait divers, accident, crime passionnel…'}]},
+  {id:'origines', t:'Origines & mythologie', f:[{k:'origines',t:'area',rows:5}]},
+  {id:'habitat', t:'Habitat & territoire', f:[{k:'milieux',l:'Milieu',t:'checks',o:['Urbain','Rural','Sauvage','Souterrain','Aquatique','Hors du monde']},{k:'lieux',l:'Lieux typiques',t:'area'}]},
+  {id:'moeurs', t:'Mœurs & comportement', f:[{k:'activite',l:'Activité',t:'text',ph:'jour, nuit, cycle lunaire…'},{k:'social',l:'Solitaire, meute ou société organisée',t:'text'},{k:'alimentation',l:'Alimentation / besoins',t:'text'},{k:'communication',l:'Communication',t:'text',ph:'parle ? quelle langue ? ancien langage ?'}]},
+  {id:'equilibre', t:"Rapport à l'équilibre", f:[{k:'attitude',l:'Attitude envers les humains',t:'radio',o:['Hostile','Indifférente','Ambiguë','Bienveillante']},{k:'bascule',l:"Ce qui la fait basculer hors de l'équilibre",t:'area'}]},
+  {id:'signes', t:'Signes de présence', s:"indices d'enquête", f:[{k:'signes',t:'list',add:'Ajouter un signe'}]},
+  {id:'faiblesses', t:'Faiblesses connues', f:[{k:'faiblesses',t:'area'}]},
+  {id:'protections', t:'Protections & remèdes', f:[{k:'prevenir',l:"Pour s'en prémunir",t:'area'},{k:'repousser',l:"Pour la repousser, l'apaiser ou la neutraliser",t:'area'}]},
+  {id:'rumeurs', t:'Rumeurs non vérifiées', f:[{k:'rumeurs',t:'area'}]},
+  {id:'notes', t:'Notes des Gris', s:'ajoutées en fin de scénario', f:[{k:'notes',t:'rows',cols:[{k:'date',l:'Date',type:'date',w:'9.5em'},{k:'perso',l:'Personnage',w:'10em'},{k:'texte',l:'Note',w:'1fr'}],add:'Ajouter une note'}]},
+];
+const SECTIONS_MJ = [
+  {id:'stats', mj:true, t:'Caractéristiques', s:'sur 1d100', f:[{k:'stats',t:'stats'}]},
+  {id:'attaques', mj:true, t:'Attaques', f:[{k:'attaques',t:'rows',cols:[{k:'nom',l:'Nom',w:'1fr'},{k:'stat',l:'Stat testée',w:'6em'},{k:'degats',l:'Dégâts',w:'6em'},{k:'effets',l:'Effets supplémentaires',w:'1.4fr'}],add:'Ajouter une attaque'}]},
+  {id:'reactions', mj:true, t:'Réactions privilégiées', f:[{k:'reactions',t:'checks',o:['Esquive (DEX)','Parade (FOR)']},{k:'reactionAutre',l:'Autre réaction',t:'text'}]},
+  {id:'pouvoirs', mj:true, t:'Pouvoirs & capacités spéciales', f:[{k:'pouvoirs',t:'area',rows:4}]},
+  {id:'vuln', mj:true, t:'Vulnérabilités', f:[{k:'vArmes',l:'Armes / matériaux efficaces',t:'text'},{k:'vInefficaces',l:'Armes inefficaces',t:'text'},{k:'vMots',l:"Mots de l'ancien langage efficaces",t:'text'},{k:'vAutres',l:'Autres (lieux, objets, rituels, conditions)',t:'area'}]},
+  {id:'resist', mj:true, t:'Résistances & immunités', f:[{k:'resistances',t:'area'}]},
+  {id:'sante', mj:true, t:'Perte de Santé mentale', f:[{k:'smRencontre',l:'À la première rencontre',t:'text'},{k:'smPouvoirs',l:'Face à ses pouvoirs / sa vraie forme',t:'text'}]},
+  {id:'butin', mj:true, t:'Butin & artefacts', s:"pour l'armurerie", f:[{k:'butin',t:'area'}]},
+  {id:'mots', mj:true, t:"Mots de l'ancien langage à apprendre", f:[{k:'motsApprendre',t:'area'}]},
+  {id:'secrets', mj:true, t:'Secrets du MJ', s:'ce que le Grimoire ignore ou déforme', f:[{k:'secrets',t:'area',rows:4}]},
+];
+const FIELDS = {}; [...SECTIONS_J,...SECTIONS_MJ].forEach(s=>s.f.forEach(f=>FIELDS[f.k]=f));
+
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const para = s => esc(s).split(/\n{2,}/).map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+const isEmpty = v => v==null || v==='' || (Array.isArray(v)&&v.length===0) || (typeof v==='object'&&!Array.isArray(v)&&Object.values(v).every(isEmpty));
+const today = () => { const d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); };
+const fmtDate = d => { if(!d) return ''; const x=new Date(String(d).length===10 ? d+'T12:00:00' : d); return isNaN(x)?d:x.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}); };
+function roman(n){ n=parseInt(n,10); if(!n||n<1) return '—'; if(n>3999) return String(n); const m=[[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]; let r=''; for(const [v,s] of m){while(n>=v){r+=s;n-=v;}} return r; }
+const pips = c => { const i=CONNAISSANCE.indexOf(c); return `<span class="pips" title="Connaissance : ${esc(c||'non précisée')}">${CONNAISSANCE.map((_,j)=>`<i class="${j<=i?'on':''}"></i>`).join('')}</span>`; };
+const famLabel = e => e.famille==='Autre' ? (e.familleAutre||'Autre') : (e.famille||'');
+const visOf = (e,s) => (e && e.vis && typeof e.vis[s.id]==='boolean') ? e.vis[s.id] : !s.mj;
+const ORN = `<svg viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M7 0 L9 7 L7 14 L5 7 Z"/><path d="M0 7 L7 5 L14 7 L7 9 Z" opacity=".5"/></svg>`;
+const SIGIL_SMALL = `<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="20" cy="20" r="18"/><circle cx="20" cy="20" r="14" stroke-dasharray="1.5 2.5"/><path d="M20 5 L33 28 H7 Z"/><path d="M11 20 Q20 12 29 20 Q20 28 11 20 Z"/><circle cx="20" cy="20" r="2.6" fill="currentColor"/></svg>`;
+const SIGIL = `<svg class="big" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width=".8" aria-hidden="true"><circle cx="20" cy="20" r="18"/><circle cx="20" cy="20" r="14" stroke-dasharray="1.5 2.5"/><path d="M20 5 L33 28 H7 Z"/><path d="M20 35 L7 12 H33 Z" opacity=".45"/><path d="M11 20 Q20 12 29 20 Q20 28 11 20 Z"/><circle cx="20" cy="20" r="2.6" fill="currentColor"/></svg>`;
+
+function readStats(d){
+  const s=d.stats||{};
+  if(isEmpty(s)) return '';
+  const grid = `<div class="statgrid">${STATS.map(k=>`<div><div class="k">${k}</div><div class="v">${esc(s[k]||'—')}</div></div>`).join('')}</div>`;
+  const ex = EXTRA.filter(x=>!isEmpty(s[x.k])).map(x=>`<span>${x.l} <b>${esc(s[x.k])}</b>${x.hint?` <small>${x.hint}</small>`:''}</span>`).join('');
+  return `<div class="field">${grid}${ex?`<div class="statline">${ex}</div>`:''}</div>`;
+}
+function readField(f,d){
+  if(f.t==='stats') return readStats(d);
+  const v=d[f.k]; if(isEmpty(v)) return '';
+  let b='';
+  if(f.t==='text'||f.t==='area') b=para(v);
+  else if(f.t==='radio') b=`<p>${esc(v)}</p>`;
+  else if(f.t==='checks') b=`<p class="tags">${v.map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</p>`;
+  else if(f.t==='list') b=`<ul class="signs">${v.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+  else if(f.t==='rows' && f.k==='notes') b=`<div class="notes">${v.map(n=>`<div class="note"><div class="who">${n.date?esc(fmtDate(n.date))+' — ':''}<b>${esc(n.perso||'Anonyme')}</b></div>${para(n.texte)}</div>`).join('')}</div>`;
+  else if(f.t==='rows') b=`<div class="tablewrap"><table class="atk"><thead><tr>${f.cols.map(c=>`<th>${esc(c.l)}</th>`).join('')}</tr></thead><tbody>${v.map(r=>`<tr>${f.cols.map(c=>`<td>${esc(r[c.k])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  return `<div class="field">${f.l?`<div class="flabel">${esc(f.l)}</div>`:''}<div class="fval">${b}</div></div>`;
+}
+function readSection(s,num,d,o={}){
+  const inner = s.f.map(f=>readField(f,d||{})).join('');
+  return `<section class="sec${o.veiled?' veiled':''}"><h3><span class="rn">${roman(num)}.</span>${esc(s.t)}${s.s?`<span class="sub">${esc(s.s)}</span>`:''}${o.badge||''}</h3>${inner||'<p class="blank">Page blanche.</p>'}${o.extra||''}</section>`;
+}
+
+function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.setAttribute('role','status'); t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2600); }
+function modal(inner){
+  const m=document.createElement('div'); m.className='modal';
+  m.innerHTML=`<div class="box" role="dialog" aria-modal="true">${inner}</div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click',ev=>{ if(ev.target===m||ev.target.closest('[data-close]')) m.remove(); });
+  return m;
+}
+async function copyText(txt, okMsg, title){
+  try{ await navigator.clipboard.writeText(txt); toast(okMsg); return true; }
+  catch(err){
+    const m=modal(`<h3>${esc(title||'Copiez ce texte')}</h3><p>La copie automatique n'est pas disponible ici : sélectionnez le texte et copiez-le.</p><textarea class="ta" readonly style="height:40vh">${esc(txt)}</textarea><div class="row"><button class="btn" data-close>Fermer</button></div>`);
+    const ta=$('textarea',m); ta.focus(); ta.select(); return false;
+  }
+}
+function playerText(e, secJ, j){
+  const L=[`**${e.nom||'Sans nom'}** · Grimoire de la Brume, entrée n° ${roman(e.numero)}`];
+  if(e.autresNoms) L.push(`*${e.autresNoms}*`);
+  L.push(`Famille : ${famLabel(e)||'—'} · Connaissance : ${e.connaissance||'—'}`);
+  SECTIONS_J.filter(s=>secJ.includes(s.id)).forEach(s=>{
+    const parts=[];
+    s.f.forEach(f=>{ const v=j[f.k]; if(isEmpty(v)) return;
+      const t = Array.isArray(v) ? (f.t==='checks'? v.join(', ') : f.k==='notes' ? v.map(n=>`> ${n.date?fmtDate(n.date)+' — ':''}${n.perso||'Anonyme'} : ${n.texte}`).join('\n') : v.map(x=>'• '+x).join('\n')) : v;
+      parts.push(f.l ? `${f.l} : ${t}` : t); });
+    if(parts.length) L.push('', `__${s.t}__`, ...parts);
+  });
+  return L.join('\n');
+}
+
+const FORMAT = 'grimoire-brume-v1';
+const HEAD = '<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Grimoire de la Brume</title>'
+  + '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+  + '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+Sans+SC:wght@500;700&family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&display=swap">';
+const SHELL = `<div class="app" id="app-root">
+  <header class="top">
+    <div class="brand">${SIGIL_SMALL}<div><h1>Grimoire de la Brume</h1><small>EXEMPLAIRE DES GRIS · AYESHA</small></div></div>
+  </header>
+  <div class="layout">
+    <aside class="index" aria-label="Sommaire du grimoire">
+      <h2>SOMMAIRE <span id="count"></span></h2>
+      <input class="search" id="q" type="search" placeholder="Chercher un nom…" autocomplete="off">
+      <div class="famfilter" id="famfilter"></div>
+      <ul class="toc" id="toc"></ul>
+    </aside>
+    <main id="main"></main>
+  </div>
+</div>`;
+
+let DATA = {format:FORMAT, publishedAt:null, entries:[]};
+try{ const raw=document.getElementById('grimoire-data'); if(raw) DATA = JSON.parse(raw.textContent) || DATA; }catch(e){}
+const STANDALONE = typeof GRIMOIRE_STANDALONE !== 'undefined';
+let ENTRIES = [], BY_ID = new Map();
+function setData(d){
+  DATA = d || DATA;
+  ENTRIES = (DATA.entries||[]).slice().sort((a,b)=>(+a.numero||1e9)-(+b.numero||1e9) || String(a.nom).localeCompare(String(b.nom),'fr'));
+  BY_ID = new Map(ENTRIES.map(e=>[e.id,e]));
+}
+setData(DATA);
+const state = { sel:null, q:'', fam:'' };
+
+function renderIndex(){
+  $('#count').textContent = ENTRIES.length + (ENTRIES.length>1?' entrées':' entrée');
+  const fams = FAMILLES.filter(f=>ENTRIES.some(e=>e.famille===f));
+  $('#famfilter').innerHTML = fams.length<2 ? '' : [`<button class="chip" data-fam="" aria-pressed="${state.fam===''}">Toutes</button>`, ...fams.map(f=>`<button class="chip" data-fam="${esc(f)}" aria-pressed="${state.fam===f}">${esc(f)}</button>`)].join('');
+  const q=state.q.trim().toLowerCase();
+  const rows = ENTRIES.filter(e=>(!state.fam||e.famille===state.fam) && (!q || (String(e.nom)+' '+String(e.autresNoms||'')).toLowerCase().includes(q)));
+  $('#toc').innerHTML = !rows.length ? `<li class="empty">${ENTRIES.length?'Aucune entrée ne correspond.':'Aucune entité consignée pour l\'instant.'}</li>`
+    : rows.map(e=>`<li><button data-open="${esc(e.id)}" aria-current="${state.sel===e.id}"><span class="num">${roman(e.numero)}</span><span><span class="nm">${esc(e.nom||'Sans nom')}</span><span class="fm">${esc(famLabel(e))}</span></span>${pips(e.connaissance)}</button></li>`).join('');
+}
+
+function renderEntry(e){
+  const secJ = SECTIONS_J.filter(s=>(e.secJ||[]).includes(s.id));
+  const secM = SECTIONS_MJ.filter(s=>(e.secM||[]).includes(s.id));
+  const meta = [
+    famLabel(e) && `<span>Famille <b>${esc(famLabel(e))}</b></span>`,
+    `<span>Connaissance ${pips(e.connaissance)} <b>${esc(e.connaissance||'non précisée')}</b></span>`,
+    e.redacteur && `<span>Rédigé par <b>${esc(e.redacteur)}</b></span>`,
+    e.maj && `<span>Mis à jour le <b>${esc(fmtDate(e.maj))}</b></span>`
+  ].filter(Boolean).join('');
+  const obs = `<form class="obs" id="obsform">
+      <h3>Proposer une observation</h3>
+      <p>Ce que votre personnage a vu, appris ou subi face à cette entité. Le texte est copié pour que vous l'envoyiez au MJ, qui l'ajoutera aux Notes des Gris.</p>
+      <div class="grid"><input class="in" id="o-perso" placeholder="Personnage" aria-label="Personnage"><input class="in" type="date" id="o-date" value="${today()}" aria-label="Date"><textarea class="ta" id="o-texte" rows="3" placeholder="Observation…" aria-label="Observation"></textarea></div>
+      <div class="err" id="o-err" hidden></div>
+      <div style="margin-top:8px"><button class="btn primary" type="submit">Copier pour le MJ</button></div>
+    </form>`;
+  return `<button class="btn ghost back" data-action="back">← Sommaire</button>
+  <article class="sheet">
+    <div class="eyebrow">ENTRÉE N° ${roman(e.numero)}</div>
+    <h2 class="entry-name">${esc(e.nom||'Sans nom')}</h2>
+    ${e.autresNoms?`<p class="aka">${esc(e.autresNoms)}</p>`:''}
+    <div class="meta">${meta}</div>
+    <div class="tools"><button class="btn ghost" data-action="copy">Copier la fiche</button><button class="btn ghost" data-action="to-obs">Proposer une observation</button></div>
+    <div class="orn" style="margin-top:28px">${ORN}</div>
+    <h2 class="part-title" style="margin-top:4px">I. Ce que dit le Grimoire</h2>
+    ${secJ.length ? secJ.map((s,i)=>readSection(s,i+1,e.j)).join('') : '<p class="blank" style="text-align:center">Le Grimoire est encore muet sur cette entité.</p>'}
+    ${secM.length ? `<div class="mj"><div class="orn">${ORN}</div><h2 class="part-title">II. Ce que le Maître a révélé</h2><p class="part-sub">ÉPROUVÉ SUR LE TERRAIN</p>${secM.map((s,i)=>readSection(s,i+1,e.m)).join('')}</div>` : ''}
+    ${obs}
+  </article>`;
+}
+function renderFront(){
+  const n=ENTRIES.length;
+  return `<div class="sheet front">${SIGIL}
+    <h2>${n?'Le Grimoire est ouvert':'Le Grimoire est encore scellé'}</h2>
+    <p>${n?'Choisissez une entité dans le sommaire pour lire ce que les Gris en savent.':'Aucune entité n\'y a encore été consignée. Le MJ y ajoutera les créatures au fil des scénarios.'}</p>
+    ${n?`<p class="count">${n} ${n>1?'ENTITÉS CONSIGNÉES':'ENTITÉ CONSIGNÉE'}</p>`:''}</div>`;
+}
+function renderMain(){
+  $('#app-root').classList.toggle('reading', !!state.sel);
+  const e = state.sel && BY_ID.get(state.sel);
+  $('#main').innerHTML = (e ? renderEntry(e) : renderFront()) +
+    `<div class="foot"><span>${DATA.publishedAt?'Dernière mise en ligne le '+esc(fmtDate(DATA.publishedAt)):'Pas encore mis en ligne'}</span>${STANDALONE?'':'<button data-action="import">Mettre à jour (MJ)</button>'}</div>`;
+}
+function render(){ renderIndex(); renderMain(); }
+
+/* ---------- Mise à jour par le MJ ---------- */
+function buildDoc(data){
+  const css = document.getElementById('css').textContent;
+  const app = document.getElementById('app').textContent;
+  const json = JSON.stringify(data).replace(/</g,'\\u003c');
+  const S = 'script';
+  return '<!doctype html>\n<html lang="fr"><head>' + HEAD + '<style id="css">' + css + '</style></head><body><div id="root"></div>'
+    + '<' + S + ' type="application/json" id="grimoire-data">' + json + '</' + S + '>'
+    + '<' + S + ' id="app">' + app + '</' + S + '></body></html>';
+}
+function openImport(){
+  const m = modal(`<h3>Mettre à jour le Grimoire des joueurs</h3>
+    <ol class="steps"><li>Dans votre Grimoire du Maître, cliquez sur « Publier pour les joueurs ».</li><li>Collez ici le code copié.</li><li>Cliquez sur « Mettre en ligne ». Les joueurs verront la nouvelle version.</li></ol>
+    <textarea class="ta" id="imp-ta" style="height:26vh" placeholder="Collez le code de publication ici" aria-label="Code de publication"></textarea>
+    <div class="err" id="imp-msg" hidden></div>
+    <div class="row"><button class="btn primary" id="imp-go" disabled>Mettre en ligne</button><button class="btn" data-close>Annuler</button><span id="imp-info" class="flabel"></span></div>`);
+  const ta=$('#imp-ta',m), go=$('#imp-go',m), info=$('#imp-info',m), msg=$('#imp-msg',m);
+  let parsed=null;
+  ta.addEventListener('input',()=>{
+    parsed=null; msg.hidden=true; info.textContent='';
+    const v=ta.value.trim(); if(!v){ go.disabled=true; return; }
+    try{ const d=JSON.parse(v); if(d.format!==FORMAT||!Array.isArray(d.entries)) throw 0; parsed=d; info.textContent=d.entries.length+(d.entries.length>1?' entités prêtes':' entité prête'); go.disabled=false; }
+    catch(e){ go.disabled=true; msg.textContent="Ce code n'est pas un code de publication du Grimoire. Recopiez-le depuis le Grimoire du Maître."; msg.hidden=false; }
+  });
+  go.addEventListener('click', async ()=>{
+    if(!parsed) return;
+    go.disabled=true; go.textContent='Mise en ligne…';
+    const fail = t => { msg.textContent=t; msg.hidden=false; go.textContent='Mettre en ligne'; go.disabled=false; };
+    let art=null; try{ art = window.claude && window.claude.use ? await window.claude.use('artifact') : null; }catch(e){}
+    if(!art) return fail("La mise en ligne n'est pas possible depuis cette vue. Ouvrez le grimoire depuis votre compte Claude.");
+    try{ await art.publish(buildDoc(parsed)); go.textContent='En ligne'; }
+    catch(e){
+      const c=e&&e.code;
+      if(c==='conflict') return;
+      if(c==='not_writer'||c==='not_granted'||c==='consent_required'||c==='capability_disabled'||c==='not_declared') return fail('Ce grimoire est en lecture seule pour vous : seul le MJ peut le mettre à jour.');
+      if(c==='too_large') return fail('Le grimoire est trop volumineux pour être mis en ligne en une fois.');
+      if(c==='rate_limited') return fail('Trop de mises en ligne rapprochées. Réessayez dans une minute.');
+      fail('La mise en ligne a échoué. Réessayez dans un instant.');
+    }
+  });
+  ta.focus();
+}
+
+/* ---------- Événements ---------- */
+document.getElementById('root').innerHTML = SHELL;
+document.addEventListener('click', ev=>{
+  const t=ev.target.closest('[data-action],[data-open],[data-fam]'); if(!t) return;
+  if(t.dataset.open!==undefined){ state.sel=t.dataset.open; render(); window.scrollTo(0,0); return; }
+  if(t.dataset.fam!==undefined){ state.fam=t.dataset.fam; renderIndex(); return; }
+  const e = state.sel && BY_ID.get(state.sel);
+  switch(t.dataset.action){
+    case 'back': state.sel=null; render(); break;
+    case 'import': openImport(); break;
+    case 'copy': if(e) copyText(playerText(e, e.secJ||[], e.j||{}), 'Fiche copiée', 'Fiche à copier'); break;
+    case 'to-obs': { const f=$('#obsform'); f.scrollIntoView({behavior:'smooth',block:'center'}); $('#o-perso').focus({preventScroll:true}); break; }
+  }
+});
+document.addEventListener('submit', ev=>{
+  ev.preventDefault();
+  if(ev.target.id!=='obsform') return;
+  const e=BY_ID.get(state.sel); const texte=$('#o-texte').value.trim(), err=$('#o-err');
+  if(!texte){ err.textContent="Écrivez l'observation avant de la copier."; err.hidden=false; return; }
+  err.hidden=true;
+  const perso=$('#o-perso').value.trim()||'Anonyme', date=$('#o-date').value;
+  const txt = `📜 Observation pour le Grimoire — ${e.nom} (n° ${roman(e.numero)})\n${date?fmtDate(date)+' — ':''}${perso} : ${texte}`;
+  copyText(txt, 'Observation copiée : envoyez-la au MJ', 'Observation à envoyer au MJ');
+});
+document.addEventListener('input', ev=>{ if(ev.target.id==='q'){ state.q=ev.target.value; renderIndex(); } });
+if(STANDALONE){
+  $('#main').innerHTML='<div class="loading">Ouverture du grimoire…</div>';
+  fetch('grimoire.json',{cache:'no-store'}).then(r=>{ if(!r.ok) throw 0; return r.json(); })
+    .then(d=>{ setData(d); render(); })
+    .catch(()=>{ render(); $('#main').insertAdjacentHTML('afterbegin','<div class="banner" style="margin:0 auto 14px;max-width:780px">Le fichier grimoire.json est introuvable ou mal formé. Vérifiez qu\'il se trouve à côté de index.html et qu\'il contient bien le code copié depuis le Grimoire du Maître.</div>'); });
+} else render();
+
+})();</script>
+</body>
+</html>
